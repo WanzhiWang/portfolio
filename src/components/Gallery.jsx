@@ -10,6 +10,7 @@ const Gallery = (props) => {
   const { header } = props;
   const [data, setData] = useState(null);
   const [showMore, setShowMore] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     fetch(endpoints.gallery, {
@@ -30,11 +31,16 @@ const Gallery = (props) => {
           <Fade triggerOnce>
             <div className="gallery-grid">
               {data.gallery?.slice(0, numberOfItems).map((item, index) => (
-                <div className="gallery-card" key={index}>
+                <div 
+                  className="gallery-card" 
+                  key={index}
+                  onClick={() => setSelectedImage(item)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <div className="image-wrapper">
                     <img src={item.image} alt={item.title} />
                   </div>
-                  <div className="item-title">{item.title}</div>
+                  <h3 className="item-title">{item.title}</h3>
                 </div>
               ))}
             </div>
@@ -49,6 +55,20 @@ const Gallery = (props) => {
               >
                 Show more
               </button>
+            </div>
+          )}
+
+          {selectedImage && (
+            <div className="image-modal-overlay" onClick={() => setSelectedImage(null)}>
+              <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+                <button 
+                  className="modal-close-btn" 
+                  onClick={() => setSelectedImage(null)}
+                >
+                  &times;
+                </button>
+                <img src={selectedImage.image} alt={selectedImage.title} />
+              </div>
             </div>
           )}
         </div>
