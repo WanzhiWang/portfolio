@@ -1,32 +1,40 @@
 {
     "gallery" : [
         {
-            "image" : "images/projects/portfolio-poster.png",
-            "title": "Dev Portfolio"
+            "image" : "images/gallery/blahaj1.jpg",
+            "title": "picture"
         },
         {
-            "image" : "images/projects/portfolio-poster.png",
-            "title": "Dev Portfolio"
+            "image" : "images/gallery/blahaj2.jpg",
+            "title": "picture"
         },
         {
-            "image" : "images/projects/portfolio-poster.png",
-            "title": "Dev Portfolio"
+            "image" : "images/gallery/blahaj3.jpg",
+            "title": "picture"
         },
         {
-            "image" : "images/projects/portfolio-poster.png",
-            "title": "Dev Portfolio"
+            "image" : "images/gallery/kirby1.jpg",
+            "title": "picture"
         },
         {
-            "image" : "images/projects/portfolio-poster.png",
-            "title": "Dev Portfolio"
+            "image" : "images/gallery/kirby2.jpg",
+            "title": "picture"
         },
         {
-            "image" : "images/projects/portfolio-poster.png",
-            "title": "Dev Portfolio"
+            "image" : "images/gallery/kirby3.jpg",
+            "title": "picture"
         },
         {
-            "image" : "images/projects/portfolio-poster.png",
-            "title": "Dev Portfolio"
+            "image" : "images/gallery/raccoon1.jpg",
+            "title": "picture"
+        },
+        {
+            "image" : "images/gallery/raccoon2.jpg",
+            "title": "picture"
+        },
+        {
+            "image" : "images/gallery/raccoon3.jpg",
+            "title": "picture"
         }
     ]
 }

@@ -6,14 +6,17 @@
             "cardSubtitle":"University of Limerick",
             "cardDetailedText": "",
             "icon" : {
-                "src": "images/education/lorem-ipsum.png"
+                "src": "images/education/ul.png"
             }
         },
         {
             "title": "Sept 2018 - Jun 2022",
             "cardTitle": "B.Tech. Information Security",
             "cardSubtitle":"Huazhong University of Science and Technology",
-            "cardDetailedText": ""
+            "cardDetailedText": "",
+            "icon" : {
+                "src": "images/education/hust.png"
+            }
         }
     ]
 }
