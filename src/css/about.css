@@ -32,3 +32,9 @@
   object-fit: cover;
   display: block;
 }
+
+.about-chinese-text {
+  font-size: 5rem;
+  font-weight: normal;
+  text-align: center;
+}

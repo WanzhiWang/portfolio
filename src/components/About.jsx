@@ -29,6 +29,7 @@ function About(props) {
             <div className="bento">
               <div className="tile about-bio-tile span-4 rspan-2">
                 <ReactMarkdown>{data.about}</ReactMarkdown>
+                <div className="about-chinese-text">{data.chineseName}</div>
               </div>
               {data?.imageSource && (
                 <div className="tile about-image-tile span-2 rspan-2">
