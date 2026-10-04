@@ -26,8 +26,16 @@
             "title": "Frameworks & Technologies",
             "items" : [
                 {
-                    "icon": "images/skills/react.png",
-                    "title": "React"
+                    "icon": "images/skills/bigquery.png",
+                    "title": "Bigquery"
+                },
+                {
+                    "icon": "images/skills/cloud-storage.png",
+                    "title": "Cloud Storage"
+                },
+                {
+                    "icon": "images/skills/cloud-run.png",
+                    "title": "Cloud Run"
                 }
             ]
         },
