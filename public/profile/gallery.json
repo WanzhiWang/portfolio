@@ -1,0 +1,32 @@
+{
+    "gallery" : [
+        {
+            "image" : "images/projects/portfolio-poster.png",
+            "title": "Dev Portfolio"
+        },
+        {
+            "image" : "images/projects/portfolio-poster.png",
+            "title": "Dev Portfolio"
+        },
+        {
+            "image" : "images/projects/portfolio-poster.png",
+            "title": "Dev Portfolio"
+        },
+        {
+            "image" : "images/projects/portfolio-poster.png",
+            "title": "Dev Portfolio"
+        },
+        {
+            "image" : "images/projects/portfolio-poster.png",
+            "title": "Dev Portfolio"
+        },
+        {
+            "image" : "images/projects/portfolio-poster.png",
+            "title": "Dev Portfolio"
+        },
+        {
+            "image" : "images/projects/portfolio-poster.png",
+            "title": "Dev Portfolio"
+        }
+    ]
+}

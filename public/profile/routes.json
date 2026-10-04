@@ -24,6 +24,11 @@
             "component": "Projects",
             "path": "/projects",
             "headerTitle": "Projects"
+        },
+        {
+            "component": "Gallery",
+            "path": "/gallery",
+            "headerTitle": "Gallery"
         }
     ]
 }
