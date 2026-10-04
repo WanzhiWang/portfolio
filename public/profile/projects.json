@@ -17,7 +17,7 @@
             ]
         },
         {
-            "image" : "images/projects/caaring-poster.png",
+            "image" : "images/projects/system-migration.jpg",
             "title": "Legacy Java System Migration",
             "bodyText": "- Led the migration of a legacy Java-based utilization platform to Python and BigQuery SQL.\n - Redesigned data processing workflows, dramatically reducing daily processing time.",
             "tags" : [
