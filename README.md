@@ -10,6 +10,38 @@
 ⚡️ Data-driven and easily customizable via JSON\
 ⚡️ Well organized documentation
 
+## Simplified Project Structure
+
+```bash
+portfolio
+├── README.md
+├── public
+│   ├── images
+│   ├── manifest.json
+│   └── profile
+├── src
+│   ├── App.jsx
+│   ├── AppContext.js
+│   ├── MainApp.jsx
+│   ├── components
+│   │   ├── About.jsx
+│   │   ├── Education.jsx
+│   │   ├── Experience.jsx
+│   │   ├── FallbackSpinner.jsx
+│   │   ├── Gallery.jsx
+│   │   ├── Header.jsx
+│   │   ├── Home.jsx
+│   │   ├── NavBar.jsx
+│   │   ├── Projects.jsx
+│   │   ├── Skills.jsx
+│   │   ├── Social.jsx
+│   │   ├── ThemeToggler.jsx
+│   │   └── projects
+│   ├── constants
+│   ├── css
+│   ├── hooks
+│   └── theme
+└── vite.config.js
 
 
 
