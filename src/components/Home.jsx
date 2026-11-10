@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Typewriter from 'typewriter-effect';
 import { Fade } from 'react-awesome-reveal';
 import { Link } from 'react-router-dom';
 import endpoints from '../constants/endpoints';
 import Social from './Social';
 import FallbackSpinner from './FallbackSpinner';
+import useFetch from '../hooks/useFetch';
 import '../css/home.css';
 
 /**
@@ -15,6 +16,7 @@ import '../css/home.css';
  */
 function initialsOf(name) {
   if (!name) return '';
+
   return name
     .split(' ')
     .filter(Boolean)
@@ -25,44 +27,53 @@ function initialsOf(name) {
 }
 
 /**
- * Loads homepage data from JSON and displays a fading hero section
- * with animated roles, navigation links, a name monogram and social links.
- * Shows a loading spinner until data is available.
+ * Loads homepage data through the shared fetch hook and displays
+ * animated roles, navigation links, a name monogram and social links.
+ * Handles loading and request errors before rendering the hero section.
  *
  * @returns {React.ReactElement} Home page.
  */
 function Home() {
-  const [data, setData] = useState(null);
+  const { data, loading, error } = useFetch(endpoints.home);
 
-  useEffect(() => {
-    fetch(endpoints.home, {
-      method: 'GET',
-    })
-      .then((res) => res.json())
-      .then((res) => setData(res))
-      .catch((err) => err);
-  }, []);
+  if (loading) {
+    return <FallbackSpinner />;
+  }
 
-  return data ? (
+  if (error || !data) {
+    return (
+      <p role="alert">
+        Unable to load homepage. Please refresh the page to try again.
+      </p>
+    );
+  }
+
+  return (
     <Fade triggerOnce className="home-fade-container">
       <section className="hero">
         <div className="bento">
           <div className="tile hero-intro span-4 rspan-2">
-            {data?.status && (
+            {data.status && (
               <span className="hero-eyebrow">{data.status}</span>
             )}
-            <h1 className="hero-name">{data?.name}</h1>
+
+            <h1 className="hero-name">{data.name}</h1>
+
             <div className="hero-roles">
               <span>I&apos;m&nbsp;</span>
               <Typewriter
                 options={{
                   loop: true,
                   autoStart: true,
-                  strings: data?.roles,
+                  strings: data.roles,
                 }}
               />
             </div>
-            {data?.tagline && <p className="hero-tagline">{data.tagline}</p>}
+
+            {data.tagline && (
+              <p className="hero-tagline">{data.tagline}</p>
+            )}
+
             <div className="hero-cta">
               <Link className="btn-pill btn-accent" to="/projects">
                 View my work
@@ -74,8 +85,10 @@ function Home() {
           </div>
 
           <div className="tile tile--accent monogram span-2">
-            <span className="monogram-mark">{initialsOf(data?.name)}</span>
-            <span className="monogram-label">{data?.name}</span>
+            <span className="monogram-mark">
+              {initialsOf(data.name)}
+            </span>
+            <span className="monogram-label">{data.name}</span>
           </div>
 
           <div className="tile hero-social span-2">
@@ -85,7 +98,7 @@ function Home() {
         </div>
       </section>
     </Fade>
-  ) : <FallbackSpinner />;
+  );
 }
 
 export default Home;

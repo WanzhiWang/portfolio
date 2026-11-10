@@ -1,22 +1,18 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled, { ThemeContext } from 'styled-components';
 import endpoints from '../constants/endpoints';
 import ThemeToggler from './ThemeToggler';
-
-const styles = {
-  logoStyle: {
-    width: 50,
-    height: 40,
-  },
-};
+import useFetch from '../hooks/useFetch';
 
 const ExternalNavLink = styled.a`
   color: ${(props) => props.theme.navbarTheme.linkColor};
+
   &:hover {
     color: ${(props) => props.theme.navbarTheme.linkHoverColor};
   }
+
   &::after {
     background-color: ${(props) => props.theme.accentColor};
   }
@@ -24,37 +20,35 @@ const ExternalNavLink = styled.a`
 
 const InternalNavLink = styled(NavLink)`
   color: ${(props) => props.theme.navbarTheme.linkColor};
+
   &:hover {
     color: ${(props) => props.theme.navbarTheme.linkHoverColor};
   }
+
   &::after {
     background-color: ${(props) => props.theme.accentColor};
   }
+
   &.active {
     color: ${(props) => props.theme.navbarTheme.linkActiveColor};
   }
 `;
 
 /**
- * Loads navigation links from JSON and displays a fixed, themed navbar
- * with internal routes, external links and a theme toggle.
- * Supports a collapsible mobile menu that closes when a link is selected.
+ * Loads navigation links through the shared fetch hook and displays
+ * a fixed, themed navbar with internal routes, external links
+ * and a theme toggle. Closes the mobile menu when a link is selected.
  *
  * @returns {React.ReactElement} Navigation bar.
  */
-const NavBar = () => {
+function NavBar() {
   const theme = useContext(ThemeContext);
-  const [data, setData] = useState(null);
+  const { data, loading, error } = useFetch(endpoints.navbar);
   const [expanded, setExpanded] = useState(false);
 
-  useEffect(() => {
-    fetch(endpoints.navbar, {
-      method: 'GET',
-    })
-      .then((res) => res.json())
-      .then((res) => setData(res))
-      .catch((err) => err);
-  }, []);
+  const sections = !loading && !error && Array.isArray(data?.sections)
+    ? data.sections
+    : [];
 
   return (
     <Navbar
@@ -69,11 +63,13 @@ const NavBar = () => {
           aria-controls="responsive-navbar-nav"
           onClick={() => setExpanded(!expanded)}
         />
+
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto" />
+
           <Nav>
-            {data
-              && data.sections?.map((section, index) => (section?.type === 'link' ? (
+            {sections.map((section, index) => (
+              section?.type === 'link' ? (
                 <ExternalNavLink
                   key={section.title}
                   href={section.href}
@@ -96,8 +92,10 @@ const NavBar = () => {
                 >
                   {section.title}
                 </InternalNavLink>
-              )))}
+              )
+            ))}
           </Nav>
+
           <ThemeToggler
             onClick={() => setExpanded(false)}
           />
@@ -105,6 +103,6 @@ const NavBar = () => {
       </Container>
     </Navbar>
   );
-};
+}
 
 export default NavBar;

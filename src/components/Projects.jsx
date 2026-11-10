@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -6,58 +6,29 @@ import Header from './Header';
 import endpoints from '../constants/endpoints';
 import ProjectCard from './projects/ProjectCard';
 import FallbackSpinner from './FallbackSpinner';
+import useFetch from '../hooks/useFetch';
 import '../css/projects.css';
 
 gsap.registerPlugin(useGSAP);
 
 /**
- * Displays projects with title search, tag filtering and GSAP animations.
+ * Loads projects through the shared fetch hook and displays searchable,
+ * filterable cards with GSAP fade-in animations.
+ * Search matches titles, descriptions and tags without case sensitivity.
  *
  * @param {Object} props - Component properties.
  * @param {string} props.header - Page heading.
  * @returns {React.ReactElement} Projects page.
  */
 function Projects({ header }) {
-  const [data, setData] = useState(null);
+  const { data, loading, error } = useFetch(endpoints.projects);
   const [showMore, setShowMore] = useState(false);
-  const [error, setError] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
   const projectsRef = useRef(null);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function loadProjects() {
-      try {
-        const response = await fetch(endpoints.projects, {
-          signal: controller.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to load projects.');
-        }
-
-        const result = await response.json();
-
-        if (!Array.isArray(result.projects)) {
-          throw new Error('Invalid projects data.');
-        }
-
-        setData(result);
-      } catch (err) {
-        if (err.name !== 'AbortError') {
-          setError(true);
-        }
-      }
-    }
-
-    loadProjects();
-
-    return () => controller.abort();
-  }, []);
-
-  const projects = data?.projects ?? [];
+  const projectsValid = Array.isArray(data?.projects);
+  const projects = projectsValid ? data.projects : [];
 
   const tags = [...new Set(
     projects.flatMap((project) => project.tags ?? []),
@@ -91,7 +62,7 @@ function Projects({ header }) {
       '(prefers-reduced-motion: reduce)',
     ).matches;
 
-    if (!data || reduceMotion) return;
+    if (loading || error || !projectsValid || reduceMotion) return;
 
     gsap.from('.project-card', {
       opacity: 0,
@@ -102,7 +73,7 @@ function Projects({ header }) {
     });
   }, {
     scope: projectsRef,
-    dependencies: [data, showMore, search, selectedTag],
+    dependencies: [data, loading, error, showMore, search, selectedTag],
     revertOnUpdate: true,
   });
 
@@ -119,13 +90,13 @@ function Projects({ header }) {
 
   let content = <FallbackSpinner />;
 
-  if (error) {
+  if (!loading && (error || !projectsValid)) {
     content = (
       <p role="alert">
         Unable to load projects. Please refresh the page to try again.
       </p>
     );
-  } else if (data) {
+  } else if (!loading) {
     content = (
       <>
         <div className="row g-3 mb-4">
@@ -137,7 +108,7 @@ function Projects({ header }) {
               id="project-search"
               type="search"
               className="form-control"
-              placeholder="Search by title..."
+              placeholder="Search by title, description or technology..."
               value={search}
               onChange={(event) => {
                 setSearch(event.target.value);

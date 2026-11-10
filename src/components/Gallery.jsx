@@ -1,91 +1,109 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Fade } from 'react-awesome-reveal';
 import PropTypes from 'prop-types';
 import Header from './Header';
 import endpoints from '../constants/endpoints';
 import FallbackSpinner from './FallbackSpinner';
+import useFetch from '../hooks/useFetch';
 import '../css/gallery.css';
 
 /**
- * Loads gallery data from JSON and displays a fading image grid.
- * Initially shows up to six items, with a Show more button for the rest.
- * Opens a larger image preview when an item is clicked and shows
- * a loading spinner until data is available.
+ * Loads gallery data through the shared fetch hook and displays
+ * a fading image grid with Show more and image preview controls.
+ * Handles loading, request errors and invalid gallery data.
  *
  * @param {Object} props - Component properties.
  * @param {string} props.header - Page heading.
  * @returns {React.ReactElement} Gallery page.
  */
-const Gallery = (props) => {
-  const { header } = props;
-  const [data, setData] = useState(null);
+function Gallery({ header }) {
+  const { data, loading, error } = useFetch(endpoints.gallery);
   const [showMore, setShowMore] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  useEffect(() => {
-    fetch(endpoints.gallery, {
-      method: 'GET',
-    })
-      .then((res) => res.json())
-      .then((res) => setData(res))
-      .catch((err) => err);
-  }, []);
+  if (loading) {
+    return (
+      <>
+        <Header title={header} />
+        <FallbackSpinner />
+      </>
+    );
+  }
 
-  const numberOfItems = showMore && data ? data.gallery.length : 6;
+  if (error || !Array.isArray(data?.gallery)) {
+    return (
+      <>
+        <Header title={header} />
+        <p role="alert">
+          Unable to load gallery. Please refresh the page to try again.
+        </p>
+      </>
+    );
+  }
+
+  const numberOfItems = showMore ? data.gallery.length : 6;
 
   return (
     <>
       <Header title={header} />
-      {data ? (
-        <div className="section-content-container">
-          <Fade triggerOnce>
-            <div className="gallery-grid">
-              {data.gallery?.slice(0, numberOfItems).map((item, index) => (
-                <div 
-                  className="gallery-card" 
-                  key={index}
-                  onClick={() => setSelectedImage(item)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div className="image-wrapper">
-                    <img src={item.image} alt={item.title} />
-                  </div>
-                  <h3 className="item-title">{item.title}</h3>
-                </div>
-              ))}
-            </div>
-          </Fade>
 
-          {!showMore && data.gallery?.length > numberOfItems && (
-            <div className="gallery-more">
-              <button
-                type="button"
-                className="btn-pill btn-ghost"
-                onClick={() => setShowMore(true)}
+      <div className="section-content-container">
+        <Fade triggerOnce>
+          <div className="gallery-grid">
+            {data.gallery.slice(0, numberOfItems).map((item, index) => (
+              <div
+                className="gallery-card"
+                key={index}
+                onClick={() => setSelectedImage(item)}
+                style={{ cursor: 'pointer' }}
               >
-                Show more
-              </button>
-            </div>
-          )}
-
-          {selectedImage && (
-            <div className="image-modal-overlay" onClick={() => setSelectedImage(null)}>
-              <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
-                <button 
-                  className="modal-close-btn" 
-                  onClick={() => setSelectedImage(null)}
-                >
-                  &times;
-                </button>
-                <img src={selectedImage.image} alt={selectedImage.title} />
+                <div className="image-wrapper">
+                  <img src={item.image} alt={item.title} />
+                </div>
+                <h3 className="item-title">{item.title}</h3>
               </div>
+            ))}
+          </div>
+        </Fade>
+
+        {!showMore && data.gallery.length > numberOfItems && (
+          <div className="gallery-more">
+            <button
+              type="button"
+              className="btn-pill btn-ghost"
+              onClick={() => setShowMore(true)}
+            >
+              Show more
+            </button>
+          </div>
+        )}
+
+        {selectedImage && (
+          <div
+            className="image-modal-overlay"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div
+              className="image-modal-content"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                className="modal-close-btn"
+                onClick={() => setSelectedImage(null)}
+              >
+                &times;
+              </button>
+              <img
+                src={selectedImage.image}
+                alt={selectedImage.title}
+              />
             </div>
-          )}
-        </div>
-      ) : <FallbackSpinner />}
+          </div>
+        )}
+      </div>
     </>
   );
-};
+}
 
 Gallery.propTypes = {
   header: PropTypes.string.isRequired,
