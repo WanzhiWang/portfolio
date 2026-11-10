@@ -62,10 +62,10 @@ function Contact({ header }) {
       <Header title={header} />
 
       <div className="section-content-container">
-        <form 
-            className="contact-form"
-            onSubmit={handleSubmit} 
-            aria-busy={status === 'sending'}
+        <form
+          className="contact-form"
+          onSubmit={handleSubmit}
+          aria-busy={status === 'sending'}
         >
           <div className="mb-3">
             <label htmlFor="contact-name" className="form-label">
