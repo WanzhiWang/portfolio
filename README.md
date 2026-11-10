@@ -9,6 +9,7 @@ A responsive personal portfolio built with React and Vite, presenting my backgro
 - Responsive bento-style layout and reusable page components.
 - Light theme by default for first-time visitors, with a dark-mode toggle and a saved theme preference.
 - JSON-driven portfolio content in `public/profile/`.
+- Shared `useFetch` hook for JSON requests, loading/error states and request cancellation.
 - Lazy-loaded section components using `React.lazy` and `Suspense`.
 - Project search across titles, descriptions and technology tags, ignoring case.
 - Technology filtering based on existing project tags, combined with search.
@@ -17,7 +18,7 @@ A responsive personal portfolio built with React and Vite, presenting my backgro
 - Gallery image previews and Show more controls where applicable.
 - EmailJS contact form with required name and message fields and an optional email address.
 - Contact validation, sending state, success/error feedback and form reset after successful submission.
-- PropTypes for component props and JSDoc documentation for added components and functions.
+- PropTypes for component props and JSDoc documentation for major components and custom hooks.
 - Automated linting, testing, production builds and deployment.
 
 ## Technology Stack
@@ -58,7 +59,15 @@ portfolio/
 │   │   └── endpoints.js       # Local JSON resource paths
 │   ├── css/                   # Section-specific styles
 │   ├── hooks/
-│   │   └── useDarkMode.js     # Theme state and persistence
+│   │   ├── useDarkMode.js     # Theme state and persistence
+│   │   └── useFetch.js        # Shared JSON requests and request lifecycle
+│   ├── tests/
+│   │   ├── App.test.jsx
+│   │   ├── Projects.test.jsx
+│   │   ├── Contact.test.jsx
+│   │   ├── useDarkMode.test.jsx
+│   │   └── useFetch.test.jsx
+│   ├── setupTests.js          # Shared test setup
 │   └── theme/                 # Theme values and global styles
 ├── .env.local                 # Local EmailJS configuration; not committed
 ├── package.json
@@ -67,6 +76,21 @@ portfolio/
 ```
 
 The tree highlights the main files rather than every component. Page components handle presentation and interaction, JSON files hold portfolio content, and theme files centralise shared colours and design tokens.
+
+## Architecture and Data Flow
+
+| Area | Responsibility |
+| --- | --- |
+| Application shell | `App.jsx` supplies routing and theme providers; `MainApp.jsx` renders configured routes |
+| Components | Pages render content and manage local interactions such as search, filtering and image previews |
+| Theme and state | Context shares theme state; `useDarkMode` persists the preference; theme tokens supply CSS variables |
+| Data and access | JSON files store content, `endpoints.js` defines paths, and `useFetch` manages requests |
+
+The JSON data flow is: endpoint configuration → `useFetch` → component rendering. The hook returns `{ data, loading, error }`, checks HTTP responses, parses JSON and aborts requests on unmount or URL changes. An active-request guard prevents late results from overwriting state after cleanup. Components retain responsibility for checking the data shape they require and for choosing their loading/error presentation. The hook does not implement caching or automatic retries.
+
+The shared hook replaces repeated request blocks in About, Education, Experience, Skills, Gallery, Home, Social, NavBar, MainApp and Projects. Contact continues to use EmailJS because sending a message is a separate operation from loading JSON.
+
+Home is statically imported as the entry page, while section components are lazy-loaded to defer their JavaScript until visited. Lazy component definitions are kept outside rendering so their identities remain stable. HashRouter supports static hosting without server rewrites. The existing theme-toggle import includes a compatibility workaround for its CommonJS export shape.
 
 ## Local Setup
 
@@ -135,7 +159,26 @@ Keep JSON valid and check that image paths match files under `public/images/`.
 | `npm run build` | Generate the production website in `build/` |
 | `npm run preview` | Preview the production build locally |
 
-The current automated test suite contains a basic application rendering test. It is a smoke test, not full coverage of the contact, search or deployment flows.
+### Automated Tests
+
+Tests are grouped in `src/tests/` and use Vitest with React Testing Library. The suite contains 36 test cases across five files:
+
+| File | Cases | Behaviour checked |
+| --- | --- | --- |
+| `App.test.jsx` | 1 | Application rendering smoke test |
+| `Projects.test.jsx` | 10 | Loaded content; case-insensitive title, description and tag search; technology filtering; combined filters; clearing; HTTP, network and data-shape errors |
+| `Contact.test.jsx` | 9 | Required and optional fields; submitted values; whitespace and email validation; success/reset; failure/preserved input; disabled submission while sending |
+| `useDarkMode.test.jsx` | 9 | Default and saved preferences; toggle/enable/disable; persistence across remounts; storage read/write failures |
+| `useFetch.test.jsx` | 7 | Loading/success; HTTP, network and JSON errors; cancellation; error recovery; stale-response protection |
+
+Network requests and EmailJS are mocked, so the tests do not send real messages or consume email quota. Projects tests mock GSAP to focus on functional behaviour. These tests do not establish complete code coverage or verify visual animation quality and real email delivery.
+
+Run all tests with `npm test`, or target a file:
+
+```bash
+npm test -- src/tests/useFetch.test.jsx
+```
+
 
 ### Manual Walkthrough
 
@@ -181,24 +224,8 @@ https://wanzhiwang.github.io/portfolio/#/contact
 
 If the repository name or hosting path changes, update Vite's base setting and check resource paths.
 
-## Enhancements and Limitations
-
-The inherited project already provided JSON-driven sections, theme support, component separation, PropTypes and lazy-loading infrastructure. This iteration added the EmailJS Contact page, project search and tag filtering, GSAP project animations, an explicit lazy component mapping, light mode as the initial default, and GitHub Actions deployment. Styling was also adjusted for consistent input and button backgrounds.
-
-The site remains a static frontend. Contact messages depend on EmailJS rather than a locally hosted backend, and content updates are made through JSON files rather than an administration interface. The theme toggle's transitive `lottie-web` dependency may produce an `eval` warning during production builds; the warning is separate from application code and does not by itself indicate a failed build. Automated testing currently covers basic rendering only.
-
 ## Attribution and License
 
 Customised by [Wanzhi Wang](https://github.com/WanzhiWang) for a personal developer portfolio.
 
 Based on [Dev Portfolio](https://github.com/mayankagarwal09/dev-portfolio) by [Mayank Agarwal](https://github.com/mayankagarwal09). Original attribution and the MIT license notice are retained in [LICENSE.md](LICENSE.md).
-
-## References
-
-- [React documentation](https://react.dev/)
-- [Vite documentation](https://vite.dev/guide/)
-- [React Router documentation](https://reactrouter.com/)
-- [GSAP React integration](https://gsap.com/resources/React/)
-- [EmailJS React integration](https://www.emailjs.com/docs/examples/reactjs/)
-- [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
-- [Vitest documentation](https://vitest.dev/guide/)
