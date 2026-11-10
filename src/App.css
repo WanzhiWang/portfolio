@@ -108,7 +108,7 @@
 }
 
 .btn-ghost {
-  background: transparent;
+  background-color: var(--surface);
   color: var(--text);
   border: 1px solid var(--border);
 }
@@ -117,6 +117,7 @@
   border-color: var(--accent);
   transform: translateY(-2px);
   color: var(--text);
+  background-color: var(--surface);
 }
 
 .tile-label {
@@ -246,4 +247,12 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+}
+
+/* ---- Contact Form ---------------------------------------------------------- */
+.contact-form .form-control,
+.contact-form .form-control:focus {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
 }

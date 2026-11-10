@@ -29,6 +29,11 @@
             "component": "Gallery",
             "path": "/gallery",
             "headerTitle": "Gallery"
+        },
+        {
+            "component": "Contact",
+            "path": "/contact",
+            "headerTitle": "Contact"
         }
     ]
 }
