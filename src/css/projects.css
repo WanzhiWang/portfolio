@@ -120,3 +120,12 @@
   justify-content: center;
   margin-top: var(--space-6);
 }
+
+.projects-section .form-control,
+.projects-section .form-control:focus,
+.projects-section .form-select,
+.projects-section .form-select:focus {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
