@@ -7,6 +7,12 @@ import Social from './Social';
 import FallbackSpinner from './FallbackSpinner';
 import '../css/home.css';
 
+/**
+ * Extracts uppercase initials from the first two non-empty name parts.
+ *
+ * @param {string} name - Name used to generate the initials.
+ * @returns {string} Initials, or an empty string when no name is provided.
+ */
 function initialsOf(name) {
   if (!name) return '';
   return name
@@ -18,6 +24,13 @@ function initialsOf(name) {
     .toUpperCase();
 }
 
+/**
+ * Loads homepage data from JSON and displays a fading hero section
+ * with animated roles, navigation links, a name monogram and social links.
+ * Shows a loading spinner until data is available.
+ *
+ * @returns {React.ReactElement} Home page.
+ */
 function Home() {
   const [data, setData] = useState(null);
 

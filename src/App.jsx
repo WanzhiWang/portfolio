@@ -9,6 +9,13 @@ import MainApp from './MainApp';
 import GlobalStyles from './theme/GlobalStyles';
 import { lightTheme, darkTheme } from './theme/themes';
 
+/**
+ * Initialises the application with shared theme state, themed global
+ * styles and hash-based routing for static hosting.
+ * Defaults to light mode when no saved theme preference exists.
+ *
+ * @returns {React.ReactElement} Root application component.
+ */
 function App() {
   const darkMode = useDarkMode(false);
 

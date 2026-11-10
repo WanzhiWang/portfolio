@@ -7,6 +7,15 @@ import endpoints from '../constants/endpoints';
 import FallbackSpinner from './FallbackSpinner';
 import '../css/about.css';
 
+/**
+ * Loads biography data from JSON and displays Markdown content,
+ * a Chinese name and an optional profile image with a fade-in animation.
+ * Shows a loading spinner until data is available.
+ *
+ * @param {Object} props - Component properties.
+ * @param {string} props.header - Page heading.
+ * @returns {React.ReactElement} About page.
+ */
 function About(props) {
   const { header } = props;
   const [data, setData] = useState(null);

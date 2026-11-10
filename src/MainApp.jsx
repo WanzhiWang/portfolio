@@ -15,6 +15,13 @@ const sectionComponents = {
   Contact: React.lazy(() => import('./components/Contact.jsx')),
 };
 
+/**
+ * Displays the shared navigation and application routes.
+ * Loads section routes from JSON and maps them to lazy-loaded components.
+ * Shows a fallback spinner while lazy-loaded components are loading.
+ *
+ * @returns {React.ReactElement} Main application layout.
+ */
 function MainApp() {
   const [data, setData] = useState(null);
 

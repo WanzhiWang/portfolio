@@ -6,6 +6,16 @@ import endpoints from '../constants/endpoints';
 import FallbackSpinner from './FallbackSpinner';
 import '../css/gallery.css';
 
+/**
+ * Loads gallery data from JSON and displays a fading image grid.
+ * Initially shows up to six items, with a Show more button for the rest.
+ * Opens a larger image preview when an item is clicked and shows
+ * a loading spinner until data is available.
+ *
+ * @param {Object} props - Component properties.
+ * @param {string} props.header - Page heading.
+ * @returns {React.ReactElement} Gallery page.
+ */
 const Gallery = (props) => {
   const { header } = props;
   const [data, setData] = useState(null);

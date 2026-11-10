@@ -11,6 +11,13 @@ const styles = {
   },
 };
 
+/**
+ * Loads social profile links from JSON and displays icons styled
+ * with the current theme. Links open in a new browser tab.
+ * Renders no icons until data is available.
+ *
+ * @returns {React.ReactElement} Social links container.
+ */
 function Social() {
   const theme = useContext(ThemeContext);
   const [data, setData] = useState(null);

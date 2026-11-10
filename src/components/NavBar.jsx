@@ -35,6 +35,13 @@ const InternalNavLink = styled(NavLink)`
   }
 `;
 
+/**
+ * Loads navigation links from JSON and displays a fixed, themed navbar
+ * with internal routes, external links and a theme toggle.
+ * Supports a collapsible mobile menu that closes when a link is selected.
+ *
+ * @returns {React.ReactElement} Navigation bar.
+ */
 const NavBar = () => {
   const theme = useContext(ThemeContext);
   const [data, setData] = useState(null);

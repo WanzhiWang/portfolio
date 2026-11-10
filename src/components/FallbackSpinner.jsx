@@ -10,6 +10,12 @@ const styles = {
   },
 };
 
+/**
+ * Displays a centred loading spinner while page data
+ * or lazy-loaded components are being loaded.
+ *
+ * @returns {React.ReactElement} Loading indicator.
+ */
 function FallbackSpinner() {
   return (
     <div style={styles.spinnerContainerStyle}>

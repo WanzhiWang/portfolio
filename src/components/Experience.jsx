@@ -7,6 +7,15 @@ import endpoints from '../constants/endpoints';
 import FallbackSpinner from './FallbackSpinner';
 import '../css/timeline.css';
 
+/**
+ * Loads professional experience data from JSON and displays a timeline
+ * with dates, roles, subtitles, optional work types and Markdown descriptions.
+ * Shows a loading spinner until data is available and fades in the timeline.
+ *
+ * @param {Object} props - Component properties.
+ * @param {string} props.header - Page heading.
+ * @returns {React.ReactElement} Experience page.
+ */
 function Experience(props) {
   const { header } = props;
   const [data, setData] = useState(null);

@@ -8,6 +8,14 @@ import AppContext from '../AppContext';
 // namespace object. Unwrap defensively so it works under any bundler.
 const DarkModeToggle = DarkModeToggleImport.default ?? DarkModeToggleImport;
 
+/**
+ * Displays a light/dark theme toggle using shared state from AppContext.
+ * Calls the optional callback after toggling the theme.
+ *
+ * @param {Object} props - Component properties.
+ * @param {Function} [props.onClick] - Callback invoked after a theme change.
+ * @returns {React.ReactElement} Theme toggle control.
+ */
 function ThemeToggler({ onClick = () => {} }) {
   const handleOnChange = (darkMode) => {
     darkMode.toggle();

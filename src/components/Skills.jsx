@@ -7,6 +7,15 @@ import endpoints from '../constants/endpoints';
 import FallbackSpinner from './FallbackSpinner';
 import '../css/skills.css';
 
+/**
+ * Loads skills data from JSON and displays an optional Markdown
+ * introduction and category cards containing skill icons and names.
+ * Shows a loading spinner until data is available and fades in the content.
+ *
+ * @param {Object} props - Component properties.
+ * @param {string} props.header - Page heading.
+ * @returns {React.ReactElement} Skills page.
+ */
 function Skills(props) {
   const { header } = props;
   const [data, setData] = useState(null);

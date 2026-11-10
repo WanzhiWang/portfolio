@@ -6,6 +6,15 @@ import Header from './Header';
 import FallbackSpinner from './FallbackSpinner';
 import '../css/timeline.css';
 
+/**
+ * Loads education data from JSON and displays a timeline with dates,
+ * qualifications, institutions, optional icons and additional details.
+ * Shows a loading spinner until data is available and fades in the timeline.
+ *
+ * @param {Object} props - Component properties.
+ * @param {string} props.header - Page heading.
+ * @returns {React.ReactElement} Education page.
+ */
 function Education(props) {
   const { header } = props;
   const [data, setData] = useState(null);
