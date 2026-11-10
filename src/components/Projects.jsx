@@ -171,7 +171,7 @@ function Projects({ header }) {
           <div className="col-md-2 d-flex align-items-end">
             <button
               type="button"
-              className="btn-pill btn-ghost"
+              className="btn-pill btn-ghost w-100"
               onClick={clearFilters}
               disabled={!search && !selectedTag}
             >
